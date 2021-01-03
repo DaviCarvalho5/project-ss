@@ -18,17 +18,18 @@ public class GameplayController : MonoBehaviour
     particleWoodHit = particleWoodHitNS;
     blood = bloodNS;
     particleSimpleBlackCircle = particleSimpleBlackCircleNS;
-    // spawnZombies(10);
-    InventoryHotBar.addItem(ItemsList.woodBox, 5);
-    InventoryHotBar.addItem(ItemsList.gun, 1);
-    StartCoroutine(fpsUpdate());
+    spawnZombies(2);
+    StartCoroutine(debugTextUpdate());
+    PlayerInventoryController.VerifyItemSelected();
   }
 
-  IEnumerator fpsUpdate()
+  IEnumerator debugTextUpdate()
   {
-    textDebug.text = "FPS: " + Mathf.RoundToInt((1 / Time.deltaTime)).ToString();
+    textDebug.text =
+      "FPS: " + Mathf.RoundToInt((1 / Time.deltaTime)).ToString() +
+      "\r\n" + "ScaleFactor: " + UIManager.scaleFactor;
     yield return new WaitForSeconds(0.5f);
-    StartCoroutine(fpsUpdate());
+    StartCoroutine(debugTextUpdate());
   }
 
   void spawnZombies(int numberOfZombies)

@@ -24,7 +24,7 @@ public class WorldGeneration : MonoBehaviour
     {
       for (int j = 0; j < WorldSettings.worldWidthinCells / 2; j++)
       {
-        int generate = (int)Random.Range(0f, 50f);
+        int generate = (int)Random.Range(0f, 40f);
 
         if (generate == 2)
         {

@@ -5,14 +5,21 @@ using Pathfinding;
 
 public class Construction : MonoBehaviour
 {
-  GridGraph gridGraph;
+  public static GridGraph gridGraph;
   float constructableRadius;
-  bool isConstructAllow, isDestructAllow;
+  static bool isConstructAllow, isDestructAllow;
   public Transform player;
   float selectorDistance;
-  [SerializeField] private GameObject selector;
-  [SerializeField] private GameObject box;
-  public GameObject itemDrop;
+  private static GameObject selector;
+  [SerializeField] public GameObject selectorNS;
+  [SerializeField] private GameObject blockNS;
+  [SerializeField] private static GameObject block;
+
+  private void Awake()
+  {
+    selector = selectorNS;
+    block = blockNS;
+  }
 
   void Start()
   {
@@ -20,65 +27,49 @@ public class Construction : MonoBehaviour
     isDestructAllow = true;
     gridGraph = AstarPath.active.data.gridGraph;
     constructableRadius = 3f;
+    selector.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0);
   }
 
   void Update()
   {
-    selectorDistance = Vector2.Distance(selector.transform.position, player.position);
+    if (GameStates.isBuilding)
+    {
+      selectorDistance = Vector2.Distance(selector.transform.position, player.position);
 
-    if (selectorDistance > constructableRadius)
-    {
-      isConstructAllow = false;
-      isDestructAllow = false;
-      selector.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.5f);
-    }
-    else
-    {
-      isConstructAllow = true;
-      isDestructAllow = true;
-      selector.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1f);
-    }
-
-    if (InventoryHotBar.hotBarItems[InventoryHotBar.selectorPosition].item.buildable == true)
-    {
-      // selector.GetComponent<SpriteRenderer>.color = new Color(1, 1, 1, 1);
-    }
-    else if (InventoryHotBar.hotBarItems[InventoryHotBar.selectorPosition].item.gun == true)
-    {
-      isConstructAllow = false;
-      isDestructAllow = false;
-      selector.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0);
-    }
-    else
-    {
-      isConstructAllow = false;
-      isDestructAllow = true;
-      selector.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0f);
-    }
-
-    if (Input.GetMouseButtonUp(0) && isDestructAllow)
-    {
-      destroyBlock();
-    }
-    if (Input.GetMouseButtonUp(1) && isConstructAllow)
-    {
-      createBlock();
+      if (selectorDistance > constructableRadius)
+      {
+        isConstructAllow = false;
+        isDestructAllow = false;
+        SetConstructorSelectorOpacity(0.5f);
+      }
+      else
+      {
+        isConstructAllow = true;
+        isDestructAllow = true;
+        SetConstructorSelectorOpacity(1f);
+      }
     }
   }
 
-  void createBlock()
+  public static void SetConstructorSelectorOpacity(float Alpha)
+  {
+    selector.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, Alpha);
+  }
+
+  public static void CreateBlock()
   {
     Vector2 gridPostion = Grid.WorldPositionToGridPosition(selector.transform.position);
-    if (!Physics2D.OverlapCircle(gridPostion * WorldSettings.cellDiameter + Vector2.one * WorldSettings.cellRadius, WorldSettings.cellRadius - 0.1f))
+
+    if (isConstructAllow && !Physics2D.OverlapCircle(gridPostion * WorldSettings.cellDiameter + Vector2.one * WorldSettings.cellRadius, WorldSettings.cellRadius - 0.1f))
     {
-      Instantiate(box, selector.transform.position, Quaternion.identity);
-      box.GetComponent<SpriteRenderer>().sprite = InventoryHotBar.hotBarItems[UIManager.selectorPosition].item.sprite;
-      InventoryHotBar.hotBarItems[UIManager.selectorPosition].quant -= 1;
-      if (InventoryHotBar.hotBarItems[UIManager.selectorPosition].quant <= 0)
-      {
-        InventoryHotBar.clearPosition(UIManager.selectorPosition);
-      }
-      else { InventoryHotBar.render(); }
+      GameObject blockGO = Instantiate(block, selector.transform.position, Quaternion.identity);
+      blockGO.GetComponent<SpriteRenderer>().sprite = GameStates.buildingItem.buildSprite;
+      blockGO.GetComponent<Block>().item = PlayerInventory.slots[PlayerInventory.hotbarSlotSelected, 0].item;
+
+      // REFATORAR
+      PlayerInventory.slots[PlayerInventory.hotbarSlotSelected, 0].quant -= 1;
+      PlayerInventoryController.Render();
+      Hotbar.Render();
 
       // REFATORAR
       Vector2 gridPosition = AStartController.WorldPositionToGridPosition(selector.transform.position);
@@ -86,33 +77,41 @@ public class Construction : MonoBehaviour
 
       FindObjectOfType<AudioManager>().Play("WoodHit" + Mathf.RoundToInt(Random.Range(1f, 3f)));
     }
-  }
 
-  void destroyBlock()
-  {
-    Collider2D collider = Physics2D.OverlapCircle((Vector2)this.transform.position + Vector2.one * 0.10f, 0.05f);
-
-    if (collider && collider.tag == "block")
+    if (PlayerInventory.slots[PlayerInventory.hotbarSlotSelected, 0].quant <= 0)
     {
-      GameObject drop = Instantiate(itemDrop, selector.transform.position + (new Vector3(0.36f, 0.36f, 0)), Quaternion.identity);
-      drop.GetComponent<ItemDrop>().item = ItemsList.woodBox;
-      drop.GetComponent<ItemDrop>().quant = 1;
-      Destroy(collider.gameObject);
-      Vector2 gridPostion = Grid.WorldPositionToGridPosition(collider.transform.position);
-      // PathfinderController.worldGrid.UpdateGridPosition((int)gridPostion.x, (int)gridPostion.y, new Node(true, collider.transform.position, (int)gridPostion.x, (int)gridPostion.y));
+      PlayerInventoryController.RemoveItemAt(PlayerInventory.hotbarSlotSelected, 0);
 
-      // REFATORAR
-      Vector2 gridPosition = AStartController.WorldPositionToGridPosition(selector.transform.position);
-      gridGraph.GetNode((int)gridPosition.x, (int)gridPosition.y).Walkable = true;
-
-      FindObjectOfType<AudioManager>().Play("WoodHit" + Mathf.RoundToInt(Random.Range(1f, 3f)));
+      PlayerInventoryController.Render();
+      Hotbar.Render();
     }
 
-    if (collider && collider.tag == "Tree")
+  }
+
+  public static void DestroyBlock()
+  {
+    Vector2 gridPostion = Grid.WorldPositionToGridPosition(selector.transform.position);
+    Collider2D collider = Physics2D.OverlapCircle(gridPostion * WorldSettings.cellDiameter + Vector2.one * WorldSettings.cellRadius, WorldSettings.cellRadius - 0.1f, 9);
+    Debug.Log("destroy");
+    if (collider)
     {
-      TreeController tree = collider.gameObject.GetComponent<TreeController>();
-      Debug.Log("l:" + tree.life);
-      tree.life -= 1;
+      if (collider.tag == "Tree")
+      {
+        TreeController tree = collider.gameObject.GetComponentInParent<TreeController>();
+        FindObjectOfType<AudioManager>().Play("WoodHit" + Mathf.RoundToInt(Random.Range(1f, 3f)));
+        tree.life -= 1;
+      }
+      Debug.Log("é collider");
+      if (collider.tag == "block")
+      {
+        Debug.Log("é block");
+        GameObject itemDropGO = Instantiate(PlayerInventoryController.itemDrop);
+        itemDropGO.GetComponent<ItemDrop>().item = collider.GetComponent<Block>().item;
+        itemDropGO.GetComponent<ItemDrop>().quant = 1;
+        itemDropGO.transform.position = collider.transform.position + Vector3.one * Random.Range(0.1f, 0.62f);
+        FindObjectOfType<AudioManager>().Play("WoodHit" + Mathf.RoundToInt(Random.Range(1f, 3f)));
+        Destroy(collider.gameObject);
+      }
     }
   }
 }

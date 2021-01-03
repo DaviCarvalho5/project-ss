@@ -10,6 +10,7 @@ TagManager:
   - Drop
   - Tree
   - Spawn
+  - TreeLeaves
   layers:
   - Default
   - TransparentFX
@@ -20,7 +21,7 @@ TagManager:
   - 
   - 
   - Unwalkable
-  - 
+  - Destructible
   - 
   - 
   - 

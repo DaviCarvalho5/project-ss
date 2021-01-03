@@ -5,66 +5,64 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
-  public static int selectorPosition;
-  GameObject invSelector;
   GameObject worldSelector;
   GameObject playerHand;
   public static CanvasScaler canvasScaler;
   public static float scaleFactor;
-  public static InventoryNormal inventoryNormal;
+  public static GameObject uiInventory, uiHotbar;
+
+  public GameObject playerHandNS, uiInventoryNS, uiHotbarNS;
   public CanvasScaler canvasScalerNS;
-  public GameObject playerHandNS;
+  public CursorController cursorControllerNS;
 
   public static bool holdingAnItem;
   public static GameObject holdObject;
 
-  bool playedTakeSFX = false;
 
   private void Awake()
   {
     canvasScaler = canvasScalerNS;
     playerHand = playerHandNS;
+    uiInventory = uiInventoryNS;
+    uiHotbar = uiHotbarNS;
   }
 
   void Start()
   {
+    GameStates.SetInventoryOpen(false);
+    GameStates.SetBuilding(false);
+    CursorController.UpdateCursor();
     holdingAnItem = false;
     holdObject = null;
     UpdateUIScale();
-    inventoryNormal = new InventoryNormal();
-    invSelector = GameObject.Find("Inventory Selector");
     worldSelector = GameObject.Find("Selector");
-    // selectorPosition = 0;
-  }
-
-  void Update()
-  {
-    if (InventoryHotBar.hotBarItems[InventoryHotBar.selectorPosition].item.handUsable)
-    {
-      playerHand.SetActive(true);
-      playerHand.GetComponent<SpriteRenderer>().sprite = InventoryHotBar.hotBarItems[InventoryHotBar.selectorPosition].item.sprite;
-      Guns.gunOnHand = true;
-    }
-    else
-    {
-      playerHand.SetActive(false);
-      Guns.gunOnHand = false;
-    }
-
-    if (Guns.gunOnHand && !playedTakeSFX)
-    {
-      FindObjectOfType<AudioManager>().Play("TakeGun1");
-      playedTakeSFX = true;
-    }
-    else if (!Guns.gunOnHand)
-    {
-      playedTakeSFX = false;
-    }
+    Hotbar.Render();
   }
 
   void UpdateUIScale()
   {
     scaleFactor = Display.displays[0].renderingWidth / canvasScaler.referenceResolution.x;
-    Debug.Log("Scale Updated to " + scaleFactor);
+    Debug.Log("[UI Manager] Scale Factor updated: " + scaleFactor);
+  }
+
+  public static void ChangeInventoryActive()
+  {
+    bool state = !uiInventory.activeSelf;
+    uiInventory.SetActive(state);
+    uiHotbar.SetActive(!state);
+
+    GameStates.isInventoryOpen = state;
+
+    CursorController.UpdateCursor();
+  }
+
+  public static void SetInventoryActive(bool state)
+  {
+    uiInventory.SetActive(state);
+    uiHotbar.SetActive(!state);
+
+    GameStates.isInventoryOpen = state;
+
+    CursorController.UpdateCursor();
   }
 }

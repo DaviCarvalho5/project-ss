@@ -2217,7 +2217,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 5, y: -134}
+  m_AnchoredPosition: {x: 5, y: -380}
   m_SizeDelta: {x: 942, y: 150}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &680368767
@@ -3797,8 +3797,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerHandNS: {fileID: 1742211378}
-  uiInventoryNS: {fileID: 680368765}
-  uiHotbarNS: {fileID: 1879717825}
+  uiInventoryNS: {fileID: 2101822263}
+  uiHotbarNS: {fileID: 115265918}
   canvasScalerNS: {fileID: 589217785}
   cursorControllerNS: {fileID: 1515596065}
 --- !u!114 &1515596065
@@ -4992,11 +4992,11 @@ PrefabInstance:
     - target: {fileID: 1241082803176795333, guid: 288c15f6152291c4f9bb63ba86fe5382, type: 3}
       propertyPath: inventoryHotbar
       value: 
-      objectReference: {fileID: 2101822263}
+      objectReference: {fileID: 115265918}
     - target: {fileID: 1241082803176795333, guid: 288c15f6152291c4f9bb63ba86fe5382, type: 3}
       propertyPath: inventoryNormal
       value: 
-      objectReference: {fileID: 115265918}
+      objectReference: {fileID: 680368765}
     - target: {fileID: 1241082803176795391, guid: 288c15f6152291c4f9bb63ba86fe5382, type: 3}
       propertyPath: m_Name
       value: Inventory Controller

@@ -15,6 +15,9 @@ Each world is a different world and you can:
 ---
 
 ## We are here
+### 0.2.1 Pre-Alpha [04/01/2020]
+- Correction: the inventory was not opening
+
 ### 0.2.0 Pre-Alpha [03/01/2021]
 - Inventory System was refactored
   - You can open it pressing "E"

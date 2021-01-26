@@ -38,6 +38,8 @@ public class PlayerInventoryController : MonoBehaviour
     createInventory.StartInventoryCreation();
     AddItem(ListOfItems.pistol, 1);
     AddItem(ListOfItems.woodenBox, 2);
+    AddItem(ListOfItems.stoneBlock, 16);
+    AddItem(ListOfItems.hammer, 1);
     // debugMessage(DebugInventory());
     VerifyItemSelected();
   }
@@ -263,8 +265,6 @@ public class PlayerInventoryController : MonoBehaviour
             slot.itemObject.GetComponent<ItemObject>().quant = slot.quant;
             int x, y;
 
-            Debug.Log("pos: " + i + "  " + j);
-
             x = i * 105 + 475;
             y = j == 0
               ? j * 100 + 135
@@ -330,6 +330,15 @@ public class PlayerInventoryController : MonoBehaviour
       if (item is BuildableItem)
       {
         GameStates.SetBuilding(true);
+        Construction.setConstruction(true);
+        Construction.setDesconstruction(false);
+        GameStates.SetBuildingItem(item as BuildableItem);
+      }
+      else if (item.itemName == "Hammer")
+      {
+        GameStates.SetBuilding(true);
+        Construction.setConstruction(false);
+        Construction.setDesconstruction(true);
         GameStates.SetBuildingItem(item as BuildableItem);
       }
       else

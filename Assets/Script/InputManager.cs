@@ -31,29 +31,23 @@ public class InputManager : MonoBehaviour
 
     if (PlayerAttributes.isLive)
     {
-
-      if (Input.GetMouseButtonDown(0) && !GameStates.isInventoryOpen)
+      if (Input.GetMouseButton(0) && !GameStates.isInventoryOpen)
       {
         if (GameStates.isBuilding)
         {
           Construction.CreateBlock();
+          Construction.DestroyBlock();
+
+        }
+        if (GameStates.isHoldingAGun && GunsController.canShot)
+        {
+          guns.Shot();
         }
       }
 
       if (Input.GetMouseButtonDown(1) && !GameStates.isInventoryOpen)
       {
-        if (GameStates.isBuilding)
-        {
-          Construction.DestroyBlock();
-        }
-      }
-
-      if (Input.GetMouseButton(0) && !GameStates.isInventoryOpen)
-      {
-        if (GameStates.isHoldingAGun && GunsController.canShot)
-        {
-          guns.Shot();
-        }
+        Construction.Interact();
       }
 
 

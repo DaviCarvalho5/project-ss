@@ -4926,10 +4926,6 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1241082803176795328, guid: 288c15f6152291c4f9bb63ba86fe5382, type: 3}
-      propertyPath: itemDropNS
-      value: 
-      objectReference: {fileID: 1676164664617089117, guid: 48350c253aa938447a71c9680db36092, type: 3}
-    - target: {fileID: 1241082803176795328, guid: 288c15f6152291c4f9bb63ba86fe5382, type: 3}
       propertyPath: dropPointNS
       value: 
       objectReference: {fileID: 1297856068}
@@ -4989,10 +4985,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1241082803176795331, guid: 288c15f6152291c4f9bb63ba86fe5382, type: 3}
-      propertyPath: size.y
-      value: 5
+    - target: {fileID: 1241082803176795330, guid: 288c15f6152291c4f9bb63ba86fe5382, type: 3}
+      propertyPath: sprites.Array.size
+      value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 1241082803176795330, guid: 288c15f6152291c4f9bb63ba86fe5382, type: 3}
+      propertyPath: sprites.Array.data[3].sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 0f876c2dbe105a74b90573d72069b45e, type: 3}
+    - target: {fileID: 1241082803176795330, guid: 288c15f6152291c4f9bb63ba86fe5382, type: 3}
+      propertyPath: sprites.Array.data[3].itemName
+      value: Hammer
+      objectReference: {fileID: 0}
+    - target: {fileID: 1241082803176795330, guid: 288c15f6152291c4f9bb63ba86fe5382, type: 3}
+      propertyPath: sprites.Array.data[3].spriteOnHand
+      value: 
+      objectReference: {fileID: 21300000, guid: 0f876c2dbe105a74b90573d72069b45e, type: 3}
     - target: {fileID: 1241082803176795333, guid: 288c15f6152291c4f9bb63ba86fe5382, type: 3}
       propertyPath: inventoryHotbar
       value: 

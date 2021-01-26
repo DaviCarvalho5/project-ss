@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1241082803176795329}
-  - component: {fileID: 1241082803176795390}
   - component: {fileID: 1241082803176795328}
   - component: {fileID: 1241082803176795331}
   - component: {fileID: 1241082803176795330}
@@ -35,25 +34,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1241082803176795390
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1241082803176795391}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eee25f9c1b1ebce4ebee9ef05c00c3ae, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sprites:
-  - itemName: Wooden Box
-    sprite: {fileID: 21300000, guid: ab16f24839e5b244db24a47e9934860f, type: 3}
-    spriteOnHand: {fileID: 21300000, guid: ab16f24839e5b244db24a47e9934860f, type: 3}
-  - itemName: Pistol
-    sprite: {fileID: 21300000, guid: dc6501db1c8e65c4dbac1e346facff39, type: 3}
-    spriteOnHand: {fileID: 21300000, guid: dc6501db1c8e65c4dbac1e346facff39, type: 3}
 --- !u!114 &1241082803176795328
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -68,6 +48,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemObjectNS: {fileID: 4555502645796709952, guid: b1ca2351ab1169a4e8423e4c685cf49a, type: 3}
   inventoryUINS: {fileID: 0}
+  hotbarSelectorNS: {fileID: 0}
+  playerHandNS: {fileID: 0}
+  itemDropNS: {fileID: 1676164664617089117, guid: 48350c253aa938447a71c9680db36092, type: 3}
+  dropPointNS: {fileID: 0}
   playerInventoryNS: {fileID: 1241082803176795331}
   createInventoryNS: {fileID: 1241082803176795333}
   debugModeNS: 1
@@ -84,7 +68,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isOpen: 0
-  size: {x: 5, y: 5}
 --- !u!114 &1241082803176795330
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -104,6 +87,9 @@ MonoBehaviour:
   - itemName: Pistol
     sprite: {fileID: 21300000, guid: dc6501db1c8e65c4dbac1e346facff39, type: 3}
     spriteOnHand: {fileID: 21300000, guid: dc6501db1c8e65c4dbac1e346facff39, type: 3}
+  - itemName: Stone Block
+    sprite: {fileID: 21300000, guid: 29399a57960e161458e84a6a7c9b3748, type: 3}
+    spriteOnHand: {fileID: 21300000, guid: 29399a57960e161458e84a6a7c9b3748, type: 3}
 --- !u!114 &1241082803176795333
 MonoBehaviour:
   m_ObjectHideFlags: 0

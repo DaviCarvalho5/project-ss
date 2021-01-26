@@ -7,7 +7,7 @@ public class Construction : MonoBehaviour
 {
   public static GridGraph gridGraph;
   float constructableRadius;
-  static bool isConstructAllow, isDestructAllow;
+  static bool isConstructAllow, isDestructAllow, isDistanceOK;
   public Transform player;
   float selectorDistance;
   private static GameObject selector;
@@ -23,8 +23,8 @@ public class Construction : MonoBehaviour
 
   void Start()
   {
-    isConstructAllow = true;
-    isDestructAllow = true;
+    isConstructAllow = false;
+    isDestructAllow = false;
     gridGraph = AstarPath.active.data.gridGraph;
     constructableRadius = 3f;
     selector.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0);
@@ -38,14 +38,12 @@ public class Construction : MonoBehaviour
 
       if (selectorDistance > constructableRadius)
       {
-        isConstructAllow = false;
-        isDestructAllow = false;
+        isDistanceOK = false;
         SetConstructorSelectorOpacity(0.5f);
       }
       else
       {
-        isConstructAllow = true;
-        isDestructAllow = true;
+        isDistanceOK = true;
         SetConstructorSelectorOpacity(1f);
       }
     }
@@ -60,11 +58,12 @@ public class Construction : MonoBehaviour
   {
     Vector2 gridPostion = Grid.WorldPositionToGridPosition(selector.transform.position);
 
-    if (isConstructAllow && !Physics2D.OverlapCircle(gridPostion * WorldSettings.cellDiameter + Vector2.one * WorldSettings.cellRadius, WorldSettings.cellRadius - 0.1f))
+    if (isDistanceOK && isConstructAllow && !Physics2D.OverlapCircle(gridPostion * WorldSettings.cellDiameter + Vector2.one * WorldSettings.cellRadius, WorldSettings.cellRadius - 0.1f))
     {
+      Item item = PlayerInventory.slots[PlayerInventory.hotbarSlotSelected, 0].item;
       GameObject blockGO = Instantiate(block, selector.transform.position, Quaternion.identity);
-      blockGO.GetComponent<SpriteRenderer>().sprite = GameStates.buildingItem.buildSprite;
-      blockGO.GetComponent<Block>().item = PlayerInventory.slots[PlayerInventory.hotbarSlotSelected, 0].item;
+      blockGO.GetComponent<SpriteRenderer>().sprite = item.sprite;
+      blockGO.GetComponent<Block>().item = item;
 
       // REFATORAR
       PlayerInventory.slots[PlayerInventory.hotbarSlotSelected, 0].quant -= 1;
@@ -88,12 +87,22 @@ public class Construction : MonoBehaviour
 
   }
 
+  public static void setConstruction(bool state)
+  {
+    isConstructAllow = state;
+  }
+
+  public static void setDesconstruction(bool state)
+  {
+    isDestructAllow = state;
+  }
+
   public static void DestroyBlock()
   {
     Vector2 gridPostion = Grid.WorldPositionToGridPosition(selector.transform.position);
     Collider2D collider = Physics2D.OverlapCircle(gridPostion * WorldSettings.cellDiameter + Vector2.one * WorldSettings.cellRadius, WorldSettings.cellRadius - 0.1f, 9);
-    Debug.Log("destroy");
-    if (collider)
+
+    if (collider && isDestructAllow)
     {
       if (collider.tag == "Tree")
       {
@@ -101,16 +110,30 @@ public class Construction : MonoBehaviour
         FindObjectOfType<AudioManager>().Play("WoodHit" + Mathf.RoundToInt(Random.Range(1f, 3f)));
         tree.life -= 1;
       }
-      Debug.Log("é collider");
+
       if (collider.tag == "block")
       {
-        Debug.Log("é block");
         GameObject itemDropGO = Instantiate(PlayerInventoryController.itemDrop);
         itemDropGO.GetComponent<ItemDrop>().item = collider.GetComponent<Block>().item;
         itemDropGO.GetComponent<ItemDrop>().quant = 1;
         itemDropGO.transform.position = collider.transform.position + Vector3.one * Random.Range(0.1f, 0.62f);
         FindObjectOfType<AudioManager>().Play("WoodHit" + Mathf.RoundToInt(Random.Range(1f, 3f)));
         Destroy(collider.gameObject);
+      }
+    }
+  }
+
+  public static void Interact()
+  {
+    Vector2 gridPostion = Grid.WorldPositionToGridPosition(Camera.main.ScreenToWorldPoint(Input.mousePosition) + new Vector3(0.4f, 0.4f, 0));
+    Collider2D collider = Physics2D.OverlapCircle(gridPostion * WorldSettings.cellDiameter - Vector2.one * WorldSettings.cellDiameter, WorldSettings.cellRadius - 0.01f);
+
+    if (collider)
+    {
+      if (collider.tag == "Door")
+      {
+        Debug.Log("a");
+        collider.GetComponent<Door>().ChangeState();
       }
     }
   }

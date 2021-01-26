@@ -6,7 +6,8 @@ public class PlayerInventory : MonoBehaviour
 {
   public bool isOpen;
   public static Slot[,] slots;
-  public Vector2Int size = new Vector2Int(4, 4);
+  [System.NonSerialized]
+  public Vector2Int size = new Vector2Int(5, 4);
 
   public static int hotbarSlotSelected = 0;
 

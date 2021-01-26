@@ -18,7 +18,7 @@ public class GameplayController : MonoBehaviour
     particleWoodHit = particleWoodHitNS;
     blood = bloodNS;
     particleSimpleBlackCircle = particleSimpleBlackCircleNS;
-    spawnZombies(10);
+    // spawnZombies(10);
     StartCoroutine(debugTextUpdate());
     PlayerInventoryController.VerifyItemSelected();
   }

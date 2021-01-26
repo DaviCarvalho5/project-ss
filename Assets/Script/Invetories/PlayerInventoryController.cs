@@ -263,6 +263,8 @@ public class PlayerInventoryController : MonoBehaviour
             slot.itemObject.GetComponent<ItemObject>().quant = slot.quant;
             int x, y;
 
+            Debug.Log("pos: " + i + "  " + j);
+
             x = i * 105 + 475;
             y = j == 0
               ? j * 100 + 135

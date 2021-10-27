@@ -7,7 +7,7 @@ _This is my way to learning Unity 2D and create my first full game._
 - You are a scientist finding the cure for the Zombies Problem.
 
 ## Features
-Each world is a different world and you can:
+Each world will be a different world and you will be able to:
 - fight with zombies;
 - craft items;
 - farming;

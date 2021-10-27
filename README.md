@@ -1,6 +1,8 @@
 # Project Scientific Solution
 _This is my way to learning Unity 2D and create my first full game._
 
+![Game Screenshot](https://i.imgur.com/efnBdp3.png)
+
 ## The game
 - You are a scientist finding the cure for the Zombies Problem.
 
